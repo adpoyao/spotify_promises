@@ -44,14 +44,18 @@ const getArtist = function (name) {
     return getFromApi(`artists/${artistId}/related-artists`);
   }).then((item) => {
     artist.related = item.artists;
-    console.log(artist);
     return artist;
-  }).catch((err) => 
-    console.error('ERROR: ', err)
-  );
+  }).then((artist) => {
+      artist.related.forEach(i => {
+        relatedArtistArray.push(i);
+      console.log(relatedArtistArray);
+      console.log(artist);
+  });
 
+  }).catch((err) => {
+    console.error('ERROR: ', err)
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
-};
+});
 
 //artists/{id}/top-tracks
 
