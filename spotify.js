@@ -1,3 +1,5 @@
+'use strict';
+
 // !!!FILL IN YOUR CLIENT ID FROM YOUR APPLICATION CONSOLE:
 // https://developer.spotify.com/my-applications/#!/applications !!!
 const CLIENT_ID = 'YOUR_ID_HERE';
