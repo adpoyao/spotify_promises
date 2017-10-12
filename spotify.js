@@ -2,7 +2,8 @@
 
 // !!!FILL IN YOUR CLIENT ID FROM YOUR APPLICATION CONSOLE:
 // https://developer.spotify.com/my-applications/#!/applications !!!
-const CLIENT_ID = 'YOUR_ID_HERE';
+const CLIENT_ID = '67aa405cef54489ca04d1eb92b953ce3';
+const CLIENT_SECRET = 'c15251c4f38b453ba1c3a86bd1ce937b';
 
 const getFromApi = function (endpoint, query = {}) {
   // You won't need to change anything in this function, but you will use this function 
@@ -29,7 +30,15 @@ const getFromApi = function (endpoint, query = {}) {
 let artist;
 
 const getArtist = function (name) {
-  // Edit me!
+  getFromApi('https://api.spotify.com/v1/search', {
+    q: name,
+    limit: 1,
+    type: 'artist'
+  }).then((item) =>
+  {artist = item.artists.items[0];
+    return artist;
+  });
+
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
 
