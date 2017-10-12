@@ -46,21 +46,21 @@ const getArtist = function (name) {
     artist.related = item.artists;
     return artist.related;
   }).then(relatedArtists => {
-    let topTracksArray =[];
+    let topTracksPromises =[];
     for(let i=0; i<relatedArtists.length; i++){
-      topTracksArray.push(
+      topTracksPromises.push(
         getFromApi(`artists/${relatedArtists[i].id}/top-tracks`, {
           country: 'US'
         })
       );
     }
-    return Promise.all(topTracksArray);
-  }).then(res => {
-    for(let i=0; i<res.length; i++){
-      artist.related[i].tracks = res[i].tracks;
-    }
-    console.log(artist);
-    return artist;
+    return Promise.all(topTracksPromises).then(topTracksArray => {
+      console.log(topTracksArray);
+      for(let i=0; i<topTracksArray.length; i++){
+        artist.related[i].tracks = topTracksArray[i].tracks;
+      }
+      return artist;
+    });
   }).catch((err) => {
     console.error('ERROR: ', err);
     // (Plan to call `getFromApi()` several times over the whole exercise from here!)
