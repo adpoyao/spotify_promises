@@ -28,6 +28,8 @@ const getFromApi = function (endpoint, query = {}) {
 };
 
 let artist;
+let artistId;
+let relatedArtistArray = [];
 
 const getArtist = function (name) {
   return getFromApi('search', {
@@ -35,18 +37,23 @@ const getArtist = function (name) {
     limit: 1,
     type: 'artist'
   }).then((item) =>
-  {artist = item.artists.items[0];
+  { artist = item.artists.items[0];
+    artistId = item.artists.items[0].id;
+    return artistId;
+  }).then((artistId) => {
+    return getFromApi(`artists/${artistId}/related-artists`);
+  }).then((item) => {
+    artist.related = item.artists;
+    console.log(artist);
     return artist;
   }).catch((err) => 
     console.error('ERROR: ', err)
   );
 
-
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
 
-
-
+//artists/{id}/top-tracks
 
 
 // =========================================================================================================
