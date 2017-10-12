@@ -44,21 +44,56 @@ const getArtist = function (name) {
     return getFromApi(`artists/${artistId}/related-artists`);
   }).then((item) => {
     artist.related = item.artists;
+    return artist.related;
+  }).then(relatedArtists => {
+    let topTracksArray =[];
+    for(let i=0; i<relatedArtists.length; i++){
+      topTracksArray.push(
+        getFromApi(`artists/${relatedArtists[i].id}/top-tracks`, {
+          country: 'US'
+        })
+      );
+    }
+    return Promise.all(topTracksArray);
+  }).then(res => {
+    for(let i=0; i<res.length; i++){
+      artist.related[i].tracks = res[i].tracks;
+    }
+    console.log(artist);
     return artist;
-  }).then((artist) => {
-      artist.related.forEach(i => {
-        relatedArtistArray.push(i);
-      console.log(relatedArtistArray);
-      console.log(artist);
-  });
-
   }).catch((err) => {
-    console.error('ERROR: ', err)
-  // (Plan to call `getFromApi()` several times over the whole exercise from here!)
-});
+    console.error('ERROR: ', err);
+    // (Plan to call `getFromApi()` several times over the whole exercise from here!)
+  });
+};
+    
+  // }).then((artist) => {
+  //   artist.related.forEach(i => {
+  //     relatedArtistArray.push(i.id);
+  //   });
+  //   return relatedArtistArray;
+  // }).then(idArray => {
+  //   const concurrentPromises = [];
+  //   for (let i=0; i<idArray.length; i++) {
+  //     concurrentPromises.push(getTopTracks(i));
+  //   }
+  //   Promise.all(concurrentPromises)
+  //     .then(result => {
+  //       console.log(result);
+  //       let newArray = result.map(album => {
+  //         return album.tracks[0].name;
+  //       });
+  //       console.log(newArray);
+  //       return newArray;
+  //       // artist.relatedTracks = result.tracks;
+  //     });
 
-//artists/{id}/top-tracks
 
+function getTopTracks(id){
+  return getFromApi(`artists/${relatedArtistArray[id]}/top-tracks`, {
+    country: 'US'
+  });
+}
 
 // =========================================================================================================
 // IGNORE BELOW THIS LINE - THIS IS RELATED TO SPOTIFY AUTHENTICATION AND IS NOT NECESSARY  
