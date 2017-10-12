@@ -30,14 +30,17 @@ const getFromApi = function (endpoint, query = {}) {
 let artist;
 
 const getArtist = function (name) {
-  getFromApi('https://api.spotify.com/v1/search', {
+  return getFromApi('search', {
     q: name,
     limit: 1,
     type: 'artist'
   }).then((item) =>
   {artist = item.artists.items[0];
     return artist;
-  });
+  }).catch((err) => 
+    console.error('ERROR: ', err)
+  );
+
 
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
